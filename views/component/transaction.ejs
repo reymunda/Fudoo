@@ -1,0 +1,62 @@
+<div class="alert alert-danger alert-dismissible fade show" role="alert" <%=isError%>>
+    <strong>Error!</strong> Stok yang tersedia tidak cukup
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div class="add-container">
+    <form method="post">
+      <div class="mb-3">
+        <label for="selectTransaction" class="form-label">Kasir</label>
+        <select id="selectTransaction" class="form-select" name="kasir" required>
+          <% for (let e of result2){%>
+                <option value="<%=e.id_kasir%>"><%=e.id_kasir%> - <%=e.nama_kasir%></option>
+            <%}%>
+        </select>
+    </div>
+        <div class="mb-3">
+          <label for="nomeja" class="form-label">No Meja</label>
+          <input type="number" class="form-control" id="nomeja" required name="nomeja">
+        </div>
+        <div class="mb-3">
+            <label for="hargaMakanan" class="form-label">Tanggal</label>
+            <input type="date" class="form-control" id="tanggal" disabled value="<%=new Date().toISOString().slice(0,10)%>" name="tanggal">
+        </div>
+        <hr class="mt-4 mb-4">
+        <div class="mb-3">
+          <label for="searchmenu" class="form-label">Cari menu</label>
+          <input type="text" class="form-control" id="searchmenu" name="searchmenu" placeholder="Cari berdasarkan nama">
+        </div>
+          <%for(let e of result){%>
+            <%if(e.stok == 0){%>
+                <div class="input-group mb-3 menu">
+                    <input type="hidden" name="hidden" value="<%=e.id_menu%>">
+                    <span class="input-group-text jenis-menu"><%=e.jenis_menu%></span>
+                    <input type="number" readonly class="form-control" id="<%=e.jenis_menu%>" placeholder="Isi jumlah beli" name="jumlahBeli" value="0">
+                    <span class="input-group-text">Stok saat ini: HABIS</span>
+                </div>
+            <%}else{%>
+          <div class="input-group mb-3 menu">
+            <input type="hidden" name="hidden" value="<%=e.id_menu%>">
+            <span class="input-group-text jenis-menu"><%=e.jenis_menu%></span>
+            <input type="number" class="form-control" id="<%=e.jenis_menu%>" placeholder="Isi jumlah beli" name="jumlahBeli" value="0">
+            <span class="input-group-text">Stok saat ini: <%=e.stok%></span>
+          </div>
+          <%}%>
+          <%}%>
+        <button type="submit" class="btn btn-success mt-2">Tambahkan Pesanan</button>
+      </form>
+</div>
+<script>
+  //Fitur Search Menu
+  let searchBar = document.querySelector('#searchmenu');
+  let menu = document.querySelectorAll('.menu');
+  searchBar.addEventListener('keyup', function(e) {
+    for(let i = 0; i < menu.length; i++){
+      if(menu[i].querySelector('.jenis-menu').textContent.toString().toLowerCase().includes(e.target.value.toLowerCase())){
+        menu[i].style.display = 'flex'
+      }else{
+        menu[i].style.display = 'none'
+      }
+    }
+  })
+
+</script>

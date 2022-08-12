@@ -1,0 +1,56 @@
+<a href="/waiters" <%=isSearched%>><img src="../../img/back.svg" class="mb-4" alt=""></a>
+<div class="mb-3">
+    <form method="post">
+        <div class="input-group mb-3">
+            <input id="myInput" type="search" class="form-control" name="search" placeholder="Cari Riwayat Transaksi (Berdasarkan nama kasir/nomor meja)" aria-label="Cari" aria-describedby="button-addon2" value="">
+            <!-- <button class="btn btn-success" type="submit" id="button-addon2" name>Cari Transaksi</button> -->
+        </div>
+    </form>
+<div class="table-container">
+<table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Id transaksi</th>
+            <th scope="col">Id pelanggan</th>
+            <th scope="col">Nama Kasir</th>
+            <th scope="col">No Meja</th>
+            <th scope="col">Tanggal Transaksi</th>
+            <th scope="col">Total Bayar</th>
+            <th scope="col">Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+          <% for (let e of result){%>
+            <tr>
+              <th scope="row"><%=e.id_transaksi%></th>
+              <td><%=e.id_pelanggan%></td>
+              <td><%=e.nama_kasir%></td>
+              <td><%=e.no_meja%></td>
+              <td><%=e.tanggal_transaksi.toDateString()%></td>
+              <td><%=e.total_bayar%></td>
+              <td><%=e.status%>
+              </td>
+              <td>
+                <form method="post">
+                  <input type="hidden" name="transaksi" value="<%=e.id_transaksi%>">
+                  <button type="submit" class="btn btn-outline-success">Pesanan Diantar</button></td>
+                </form>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>

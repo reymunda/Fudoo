@@ -6,3 +6,5 @@ npm install
 
 # Launch The App
 npm start
+
+## This Application is made for Final Exam Software Engineering UNIKOM

@@ -1,0 +1,38 @@
+<form class="d-flex mb-3" method="post" role="search">
+  <div class="input-group">
+    <span class="input-group-text" id="basic-addon1">Periode Awal</span>
+    <input type="date" class="form-control" name="periodeAwal" aria-label="Username" aria-describedby="basic-addon1">
+  </div> 
+  <div class="input-group ms-5">
+    <span class="input-group-text" id="basic-addon1">Periode Akhir</span>
+    <input type="date" class="form-control" name="periodeAkhir" aria-label="Username" aria-describedby="basic-addon1">
+  </div> 
+  <button class="btn btn-success ms-5" type="submit">Search</button>
+  <button class="btn btn-outline-success ms-2" type="reset">Reset</button>
+</form>
+<div class="mb-3">
+<div class="table-container">
+<table class="table table-hover">
+          <tr>
+            <th scope="col">Id transaksi</th>
+            <th scope="col">Nama Kasir</th>
+            <th scope="col">Tanggal transaksi</th>
+            <th scope="col">Id Pelanggan</th>
+            <th scope="col">No Meja</th>
+            <th scope="col">Total Bayar</th>
+            <th scope="col"></th>
+          </tr>
+          <% for (let e of result){%>
+          <tr>
+            <th scope="row"><%=e.id_transaksi%></th>
+            <td><%=e.nama_kasir%></td>
+            <td><%=e.tanggal_transaksi.toDateString()%></td>
+            <td><%=e.id_pelanggan%></td>
+            <td><%=e.no_meja%></td>
+            <td><%=e.total_bayar%></td>
+            <td><a href="/transaction/success/<%=e.id_transaksi%>" type="button" class="me-2 btn btn-outline-success button-detail">Detail</a>
+            </td>
+          </tr>
+          <%}%>
+      </table>
+</div>

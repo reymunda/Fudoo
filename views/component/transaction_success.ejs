@@ -1,0 +1,98 @@
+<div class="success-container">
+    <div class="success-title">
+        <h2><img src="../../img/check.svg" class="me-2" alt=""><b>Transaksi Sukses!</b></h2>
+        <h5>Nomor Meja/Nama Kasir: <%=result[0].no_meja%>/<%=result[0].nama_kasir%></h5>
+    </div>
+    <p class="mb-5">Berikut bukti transaksi pelanggan. Untuk selanjutnya akan diproses oleh juru masak</p>
+    <table class="table table-hover">
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Jenis Makanan/Minuman</th>
+          <th scope="col">Harga</th>
+          <th scope="col">Jumlah</th>
+          <th scope="col">Subtotal</th>
+        </tr>
+        <%for(let e of result){%>
+        <tr>
+            <td><%=e.id_menu%></td>
+            <td><%=e.jenis_menu%></td>
+            <td><%=e.harga%></td>
+            <td><%=e.jumlah%></td>
+            <td><%=e.sub_total%></td>
+        </tr>
+        <%}%>
+    </table>
+    <div class="footer-success">
+        <button class="btn btn-outline-success" onclick="downloadPDF('<%=forPDF%>')">Download PDF</button>
+        <h1 class="text-end mt-4">Rp.<%=result[0].total_bayar%></h1>
+    </div>
+</div>
+<script>
+    const downloadPDF = (params) => {
+        let transactionData = JSON.parse(params)
+        var data ={
+            "images": {
+        // The logo on top of your invoice
+        "logo": "https://i.ibb.co/vBdwMq7/logo-9.png",
+        // The invoice background
+        "background": "https://i.ibb.co/RTq0dw2/bg-3.png"
+            },
+            "sender": {
+                "company": "Fudoo Resto",
+                "address": "Jl. Ibrahim Adjie No.159",
+                "zip": "40278",
+                "city": "Bandung",
+                "country": "Indonesia"
+            },
+            "client": {
+                "company": `${transactionData[0].nama_kasir}`,
+                "address": `Kasir Fudoo Resto`
+            },
+            "information": {
+                "number": `${transactionData[0].id_transaksi}/${transactionData[0].no_meja}`,
+                "date": `${transactionData[0].no_meja}`,
+                "due-date": `${new Date(transactionData[0].tanggal_transaksi).toDateString()}`
+            },
+            "products": [
+            ],
+            "bottom-notice": "Terima kasih atas kunjungannya. Selamat Menikmati ^_^",
+            "settings": {
+                "currency": "IDR",
+                "margin-top": 25,
+                "tax-notation": "Pajak",
+                "margin-right": 25,
+                "margin-left": 25,
+                "margin-bottom": 25,
+                "height": "700px", // allowed units: mm, cm, in, px
+                "width": "500px", // allowed units: mm, cm, in, px
+            },
+            "translate": {
+            "number": "Kode Transaksi",
+            "date": "No meja",
+            "due-date": "Tanggal Transaksi",
+            "products": "Menu", // Defaults to 'Products'
+            "quantity": "Jumlah",
+            "price": "Harga", // Defaults to 'Price'
+            "product-total": "Subtotal",
+            "total": "Total "
+            },
+        }
+        for(let e of transactionData){
+            if(e.jumlah > 0){
+                data.products.push({
+                    "quantity": `${e.jumlah}`,
+                    "description": `${e.jenis_menu}`,
+                    "tax-rate": 5,
+                    "price": `${e.harga}`
+                })
+            }
+        }
+        easyinvoice.createInvoice(data, function (result) {
+            easyinvoice.download(`FUDOO INVOICE ${transactionData[0].id_transaksi}/${transactionData[0].no_meja}.pdf`, result.pdf);
+            //	you can download like this as well:
+            //	easyinvoice.download();
+            //	easyinvoice.download('myInvoice.pdf');   
+        });
+
+    }
+</script>

@@ -1,0 +1,61 @@
+<div class="add-container">
+    <form method="post" action="/status">
+        <div class="mb-3">
+            <label for="selectTransaction" class="form-label">Transaksi Restoran</label>
+              <select id="selectTransaction" class="form-select" name="transaksi" required onchange="tampilDetailTransaksi()">
+                <option class="transaksi">--Pilih Transaksi--</option>
+                <% for (let e of result){%>
+                  <%if(e.status == "Sedang diproses"){%>
+                    <option class="transaksi" value="<%=e.id_transaksi%>"><%=e.id_transaksi%>/<%=e.no_meja%>/<%=e.nama_kasir%></option>
+                  <%}%>
+                <%}%>
+              </select>
+        </div>
+        <div class="mb-3">
+            <label for="selectTransaction" class="form-label">Status Pesanan</label>
+            <select id="selectTransaction" class="form-select" required name="status">
+              <option value="Sedang diproses">Sedang diproses</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success mt-2">Perbarui Status</button>
+      </form>
+</div>
+<%for (let a of result){%>
+  <div class="success-container mt-4" id="<%=a.id_transaksi%>" style="display: none;">
+    <div class="success-title">
+        <h5>Nomor Meja/Nama Kasir: <%=a.no_meja%>/<%=a.nama_kasir%></h5>
+    </div>
+    <table class="table table-hover">
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Jenis Makanan/Minuman</th>
+          <th scope="col">Harga</th>
+          <th scope="col">Jumlah</th>
+        </tr>
+        <%for(let e of result2){%>
+          <%if(e.id_transaksi == a.id_transaksi){%>
+        <tr>
+            <td><%=e.id_menu%></td>
+            <td><%=e.jenis_menu%></td>
+            <td><%=e.harga%></td>
+            <td><%=e.jumlah%></td>
+        </tr>
+        <%}%>
+        <%}%>
+    </table>
+  </div>
+  <%}%>
+
+  <script>
+    const tampilDetailTransaksi = () => {
+      let listTransaksi = document.querySelectorAll(".success-container");
+      listTransaksi.forEach(e => {
+        if(document.querySelector("#selectTransaction").value == e.id){
+          e.style.display = "block";
+        }else{
+          e.style.display = "none";
+        }
+      })
+    }
+  </script>
